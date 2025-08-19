@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Stylish Number with Copy</title>
+<style>
+:root{
+  --bg: #0b1020;
+  --card: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.15);
+  --shadow: 0 20px 50px rgba(0,0,0,0.35);
+  --c1: #ff2d95;
+  --c2: #ffd166;
+  --c3: #2af598;
+  --c4: #00c6ff;
+  --c5: #7f5fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; display:grid; place-items:center;
+  background: radial-gradient(1200px 600px at 10% -10%, #18244a, transparent),
+              radial-gradient(1200px 700px at 110% 120%, #1b1037, transparent),
+              var(--bg);
+  font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans Bengali", "Noto Sans", "SolaimanLipi", sans-serif;
+  color:#eaeef9;
+}
+.card{
+  display:flex; align-items:center; gap:14px;
+  padding:18px 20px; border-radius:16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  border:1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+}
+.number{
+  font-weight:800; letter-spacing: 0.6px;
+  font-size: clamp(28px, 6vw, 52px);
+  line-height:1;
+  background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5));
+  background-size: 200% 100%;
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color: transparent; color:transparent;
+  animation: slide 8s linear infinite;
+  text-shadow: 0 0 18px rgba(127,95,255,0.25);
+  user-select:text;
+}
+@keyframes slide {
+  0%{ background-position: 0% 50%; }
+  100%{ background-position: 200% 50%; }
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 12px; border-radius:12px; cursor:pointer; border:1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color:#eaeef9; font-weight:700; font-size:14px;
+  transition: transform .15s ease, background .2s ease, border-color .2s ease;
+}
+.copy-btn svg{ width:18px; height:18px}
+.copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.3) }
+.copy-btn:active{ transform: translateY(0) scale(0.98) }
+.toast{
+  position: absolute; top: -36px; right: 0;
+  padding:8px 10px; font-size:13px; font-weight:700; border-radius:10px;
+  background: #0fd76f; color:#05110b; box-shadow: 0 8px 30px rgba(15,215,111,0.35);
+  opacity:0; transform: translateY(-8px); pointer-events:none;
+  transition: all .25s ease;
+}
+.toast.show{ opacity:1; transform: translateY(0); }
+.wrap{ position: relative }
+.theme{
+  position: fixed; left:16px; bottom:16px; display:flex; gap:8px;
+}
+.theme button{
+  width: 28px; height: 28px; border-radius: 999px; border: 1px solid var(--border); cursor:pointer;
+  background: transparent; display:inline-block
+}
+.theme .t1{ background: linear-gradient(90deg, #ff2d95, #ffd166, #2af598, #00c6ff, #7f5fff) }
+.theme .t2{ background: linear-gradient(90deg, #ff6a00, #ee0979, #8A2387, #00F5D4, #F15BB5) }
+.theme .t3{ background: linear-gradient(90deg, #00F260, #0575E6, #845EC2, #FFC75F, #FF5E78) }
+</style>
+</head>
+<body>
+  <h2>Phone Number</h2>
+  <div class="wrap">
+    <div class="card">
+      <span id="phone" class="number">01330056123</span>
+      <button id="copyBtn" class="copy-btn" aria-label="কপি করুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+          <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+        </svg>
+        কপি
+      </button>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite">কপি হয়েছে!</div>
+  </div>
+
+  <div class="theme" title="রঙ বদলান">
+    <button class="t1" data-colors="#ff2d95,#ffd166,#2af598,#00c6ff,#7f5fff" aria-label="থিম ১"></button>
+    <button class="t2" data-colors="#ff6a00,#ee0979,#8A2387,#00F5D4,#F15BB5" aria-label="থিম ২"></button>
+    <button class="t3" data-colors="#00F260,#0575E6,#845EC2,#FFC75F,#FF5E78" aria-label="থিম ৩"></button>
+  </div>
+
+<script>
+(function(){
+  const phoneEl = document.getElementById('phone');
+  const btn = document.getElementById('copyBtn');
+  const toast = document.getElementById('toast');
+
+  async function copy(text){
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand('copy'); }
+      finally { document.body.removeChild(ta); }
+    }
+  }
+
+  btn.addEventListener('click', async () => {
+    const text = phoneEl.textContent.trim();
+    try {
+      await copy(text);
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1600);
+      btn.blur();
+    } catch (e) {
+      alert('কপি করা যায়নি।');
+      console.error(e);
+    }
+  });
+
+  // Theme color changer
+  document.querySelectorAll('.theme button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const cols = b.dataset.colors.split(',');
+      const root = document.documentElement.style;
+      root.setProperty('--c1', cols[0]);
+      root.setProperty('--c2', cols[1]);
+      root.setProperty('--c3', cols[2]);
+      root.setProperty('--c4', cols[3]);
+      root.setProperty('--c5', cols[4]);
+    });
+  });
+})();
+</script>
+</body>
+</html>

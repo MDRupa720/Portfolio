@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>আপনার নাম — Portfolio</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="আধুনিক ও মিনিমাল পোর্টফোলিও — আপনার নাম">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome (icons) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" integrity="sha512-8exmH3ezxz8HqWz5DLnXl3C5eP6a2hWw4t6S/8rJHk7g4I3zB2ZQdDaaJt4jx88h4lqU7vXp4xZl8C1OqS0QxA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <style>
+      body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      font-family: 'Courier New', monospace;
+    }
+p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  
+  /* টাইপিং কার্সর */
+  border-right: 3px solid #00f6ff;
+
+  /* প্রিমিয়াম গ্রেডিয়েন্ট রঙ */
+  background: linear-gradient(90deg, #ff6ec7, #ffa500, #00f5ff, #7dff00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* হালকা glow */
+  text-shadow: 0 0 8px rgba(255,255,255,0.3);
+}
+
+  
+    #preloader {
+    position: fixed;
+    inset: 0;
+    background: #000000; /* চাইলে ব্যাকগ্রাউন্ড কালার বদলাতে পারেন */
+    z-index: 99999;
+    display: grid;
+    place-items: center;
+  }
+  #preloader img {
+    width: 100%; /* GIF এর সাইজ */
+    height: 100%;
+    object-fit: contain;
+  }
+  /* স্ক্রল বন্ধ রাখার জন্য */
+  body.no-scroll {
+    overflow: hidden;
+  }
+  /* স্মুথ ফেড-আউট */
+  .fade-out {
+    animation: fadeOut .35s ease-out forwards;
+  }
+  @keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+  }
+  
+    :root{
+      --bg: #000;
+      --text: #eef2f7;
+      --muted:#9aa0a6;
+
+      --accent1:#00eaff;
+      --accent2:#7a5cff;
+      --accent3:#ff0080;
+
+      --messenger:#0084FF;
+      --whatsapp:#25D366;
+      --telegram:#26A6E8;
+      --call:#10B981;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Bengali", "Noto Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .wrapper{
+      min-height: 100svh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: clamp(22px, 5vw, 44px);
+      padding: clamp(16px, 4vw, 48px);
+      position: relative;
+      overflow:hidden;
+    }
+    /* Subtle background glow layers */
+    .wrapper::before,
+    .wrapper::after{
+      content:"";
+      position: absolute;
+      inset: -25%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .wrapper::before{
+      background:
+        radial-gradient(1200px 600px at 12% 8%, rgba(0,234,255,.06), transparent 60%),
+        radial-gradient(900px 700px at 88% 82%, rgba(255,0,128,.07), transparent 60%);
+      filter: blur(.4px);
+    }
+    .wrapper::after{
+      background:
+        radial-gradient(600px 500px at 60% -10%, rgba(122,92,255,.08), transparent 70%);
+      mix-blend-mode: screen;
+    }
+
+    .hero{
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr;
+      place-items: center;
+      gap: clamp(16px, 4vw, 48px);
+    }
+    @media (min-width: 820px){
+      .hero{
+        grid-template-columns: auto 1fr;
+        align-items: center;
+      }
+      .title { text-align: left; }
+    }
+
+    .avatar-wrap{
+      display:flex; align-items:center; justify-content:center;
+    }
+    .avatar{
+      width: clamp(140px, 34vw, 220px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(12px);
+      opacity: 0;
+      will-change: transform, opacity, clip-path;
+    }
+    /* animated gradient ring */
+    .avatar::before{
+      content:"";
+      position:absolute; inset:-4px;
+      border-radius: 50%;
+      background: conic-gradient(from 0turn, var(--accent1), var(--accent2), var(--accent3), var(--accent1));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
+      opacity: 0;
+      transform: rotate(-120deg);
+      transition: box-shadow .3s ease;
+    }
+    /* soft inner glow */
+    .avatar::after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius:50%;
+      background: radial-gradient(60% 60% at 50% 20%, rgba(255,255,255,.08), transparent 70%);
+      pointer-events: none;
+    }
+    .avatar img{
+      width: 100%; height:100%;
+      object-fit: cover; display:block;
+      filter: saturate(1.05) contrast(1.05);
+      transition: transform .45s ease, filter .45s ease;
+    }
+    .avatar:hover img{
+      transform: scale(1.05);
+      filter: saturate(1.15) contrast(1.1);
+    }
+    .avatar:hover::before{
+      box-shadow:
+        0 0 24px rgba(0,234,255,.45),
+        0 0 60px rgba(122,92,255,.35),
+        0 0 110px rgba(255,0,128,.25);
+    }
+
+    .title{ text-align: center; z-index: 1; }
+    .name{
+      margin:0;
+      font-weight: 700;
+      letter-spacing: .5px;
+      font-size: clamp(28px, 9.5vw, 64px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,.22);
+      background-image: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+      background-size: 0% 100%; /* will animate to 100% */
+      background-repeat: no-repeat;
+      -webkit-background-clip: text; background-clip: text;
+      transform: translateY(10px);
+      opacity: 0;
+      will-change: background-size, opacity, transform;
+    }
+    .tagline{
+      margin: .4rem 0 0 0;
+      color: var(--muted);
+      font-size: clamp(14px, 2.5vw, 18px);
+      transform: translateY(10px);
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+
+    /* Contacts */
+    .contacts{ z-index:1; width:100%; display:flex; justify-content:center; }
+    .icon-list{
+      list-style: none; padding: 0; margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: clamp(12px, 3vw, 22px);
+      width: min(560px, 92vw);
+    }
+    .icon{
+      --brand: #999;
+      position: relative;
+      isolation: isolate;
+      text-decoration: none;
+      display:flex; flex-direction: column; align-items:center; justify-content:center;
+      gap: 8px;
+      border-radius: 16px;
+      padding: 16px 12px;
+      background: #0b0b0b;
+      border: 1px solid rgba(255,255,255,.06);
+      color: var(--text);
+      transform: translateY(12px) scale(.9);
+      opacity: 0;
+      transition: transform .28s ease, border-color .3s ease, box-shadow .45s ease, background .35s ease;
+      will-change: transform, box-shadow, opacity;
+    }
+    .icon i{
+      font-size: 28px;
+      color: var(--brand);
+      transition: transform .35s ease, filter .35s ease, color .35s ease, text-shadow .35s ease;
+    }
+    .icon span{
+      font-size: clamp(12px, 2.3vw, 14px);
+      color: #d8dee9;
+      letter-spacing: .2px;
+      opacity: .9;
+    }
+    .icon::before{
+      content:"";
+      position:absolute; inset:0; border-radius: inherit;
+      background: radial-gradient(60% 60% at 50% 0%, rgba(255,255,255,.06), transparent 70%);
+      opacity: .25;
+      pointer-events: none;
+    }
+    .icon:hover, .icon:focus-visible{
+      transform: translateY(-2px) scale(1.02);
+      border-color: rgba(255,255,255,.14);
+      outline: none;
+    }
+    /* moving highlight on hover */
+    .icon::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.14), transparent);
+      transform: translateX(-120%) rotate(15deg);
+      transition: transform .8s ease;
+      pointer-events: none;
+    }
+    .icon:hover::after{ transform: translateX(120%) rotate(15deg); }
+
+    /* Brand mapping */
+    .icon.messenger{ --brand: var(--messenger); }
+    .icon.whatsapp { --brand: var(--whatsapp); }
+    .icon.telegram { --brand: var(--telegram); }
+    .icon.call     { --brand: var(--call); }
+
+    /* Glow per brand on hover using color-mix for nice falloff (with fallback) */
+    .icon:hover{
+      box-shadow:
+        0 10px 26px 0 color-mix(in srgb, var(--brand) 26%, transparent),
+        0 0 60px color-mix(in srgb, var(--brand) 22%, transparent);
+      background: linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,.005)) #0b0b0b;
+    }
+    .icon:hover i{
+      transform: translateY(-2px) scale(1.06);
+      text-shadow:
+        0 0 12px color-mix(in srgb, var(--brand) 60%, transparent),
+        0 0 28px color-mix(in srgb, var(--brand) 40%, transparent);
+      filter: saturate(1.15);
+    }
+
+    /* Footer */
+    .footer{
+      z-index:1;
+      margin-top: clamp(6px, 2vh, 18px);
+      font-size: 12px;
+      color: #8b90a1;
+      opacity: .9;
+      text-align: center;
+    }
+
+    /* Animations */
+    @keyframes avatarIn{
+      0%{ opacity:0; transform: translateY(16px) scale(.9); clip-path: circle(0% at 50% 50%);}
+      60%{ opacity:1; transform: translateY(-2px) scale(1.03); clip-path: circle(75% at 50% 50%);}
+      100%{ opacity:1; transform: translateY(0) scale(1); clip-path: circle(75% at 50% 50%);}
+    }
+    @keyframes ringSweep{
+      0%{ opacity:0; transform: rotate(-120deg);}
+      100%{ opacity:1; transform: rotate(0);}
+    }
+    @keyframes fillText{
+      0%{ background-size: 0% 100%; opacity:0; transform: translateY(10px);}
+      60%{ opacity:1; }
+      100%{ background-size: 100% 100%; opacity:1; transform: translateY(0); -webkit-text-stroke: 0 rgba(255,255,255,0); }
+    }
+    @keyframes fadeUp{
+      0%{ opacity:0; transform: translateY(10px);}
+      100%{ opacity:1; transform: translateY(0);}
+    }
+    @keyframes popIn{
+      0%{ opacity:0; transform: translateY(16px) scale(.9);}
+      60%{ opacity:1; transform: translateY(-4px) scale(1.04);}
+      100%{ opacity:1; transform: translateY(0) scale(1);}
+    }
+
+    /* Drive animations only after JS marks body.ready */
+    body.ready .avatar{ animation: avatarIn 1.1s cubic-bezier(.2,.8,.2,1) .2s forwards; }
+    body.ready .avatar::before{ animation: ringSweep 1.6s ease .5s forwards; }
+    body.ready .name{ animation: fillText 2.0s cubic-bezier(.19,1,.22,1) .45s forwards; }
+    body.ready .tagline{ animation: fadeUp .9s ease .9s forwards; }
+    body.ready .icon{
+      animation: popIn .7s cubic-bezier(.2,.8,.2,1) forwards;
+      animation-delay: calc(1.1s + var(--i, 0) * 140ms);
+    }
+
+    /* Responsiveness tweaks */
+    @media (max-width: 420px){
+      .icon i{ font-size: 26px; }
+      .icon{ padding: 14px 10px; }
+    }
+
+    /* Accessibility: reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
+      .avatar, .name, .tagline, .icon{ opacity: 1; transform: none; clip-path: none; }
+      .avatar::before{ opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="preloader" role="status" aria-label="Loading">
+  <img src="Ninja.gif" alt="Loading..." />
+</div>
+  <main class="wrapper">
+    <header class="hero" aria-label="Hero">
+      <div class="avatar-wrap">
+        <!-- আপনার ছবির জন্য: your-photo.jpg ফাইলে আপনার ছবি দিন বা কোনো ইমেজ URL বসান -->
+        <div class="avatar" title="আপনার ছবি">
+          <img src="akash.jpg" alt="আপনার ছবি (placeholder)" />
+        </div>
+      </div>
+
+      <div class="title">
+        <!-- আপনার নাম এখানে বসান -->
+        <h1 class="name">MD Akash</h1>
+        <p class="tagline">  <p id="typing"></p>
+ </div>
+    </header>
+
+    <section class="contacts" aria-label="যোগাযোগ">
+      <ul class="icon-list" role="list">
+        <li style="--i:0">
+          <a class="icon messenger" href="https://www.facebook.com/share/1ETc4rsBTR/" target="_blank" rel="noopener" aria-label="Open Facebook Messenger">
+            <i class="fa-brands fa-facebook-messenger" aria-hidden="true"></i>
+            <span>Messenger</span>
+          </a>
+        </li>
+        <li style="--i:1">
+          <a class="icon whatsapp" href="https://wa.me/8801330056123" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            <span>WhatsApp</span>
+          </a>
+        </li>
+        <li style="--i:2">
+          <!-- আপনার টেলিগ্রাম ইউজারনেম/লিঙ্ক এখানে দিন -->
+          <a class="icon telegram" href="https://t.me/01330056123" target="_blank" rel="noopener" aria-label="Message on Telegram">
+            <i class="fa-brands fa-telegram" aria-hidden="true"></i>
+            <span>Telegram</span>
+          </a>
+        </li>
+        <li style="--i:3">
+          <a class="icon call" href="number.html" aria-label="Call 01330056123">
+            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+            <span>Call</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      © <span id="year"></span> আপনার নাম
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+    var body = document.body;
+    var pre = document.getElementById('preloader');
+
+    // স্ক্রল লক
+    body.classList.add('no-scroll');
+
+    function hidePreloader() {
+      if (!pre) return;
+      pre.classList.add('fade-out');
+      setTimeout(function () {
+        pre.remove ? pre.remove() : (pre.style.display = 'none');
+        body.classList.remove('no-scroll');
+      }, 350);
+    }
+
+    // DOM প্রস্তুত হলে ৫ সেকেন্ড পরে হাইড
+    function startTimer() {
+      setTimeout(hidePreloader, 5000); // ৫ সেকেন্ড = 5000ms (চাইলে সময় বদলাতে পারেন)
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startTimer);
+    } else {
+      startTimer();
+    }
+
+    // যদি চান সব asset (ইমেজ/CSS/JS) পুরোপুরি লোড হওয়ার পর ৫ সেকেন্ড গণনা শুরু হোক:
+    // window.addEventListener('load', () => setTimeout(hidePreloader, 5000));
+  })();
+    // অ্যানিমেশন ট্রিগার
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('ready');
+      // বছর সেট
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // ফটো লোড ব্যর্থ হলে প্লেসহোল্ডার দেখানো
+      const img = document.querySelector('.avatar img');
+      img.addEventListener('error', () => {
+        img.src = 'https://placehold.co/600x600/111/FFFFFF?text=Your+Photo';
+      });
+    });
+        const texts = [
+      "Web Developer",
+      "Graphic Designer",
+      "Game Developer",
+      "App Builder",
+      "3D Model & Animation"
+    ];
+
+    let index = 0;
+    let charIndex = 0;
+    let currentText = "";
+    let isDeleting = false;
+    const typingElement = document.getElementById("typing");
+
+    function type() {
+      if (!isDeleting) {
+        currentText = texts[index].slice(0, ++charIndex);
+        typingElement.textContent = currentText;
+        typingElement.style.width = charIndex + "ch";
+
+        if (charIndex === texts[index].length) {
+          isDeleting = true;
+          setTimeout(type, 2000); // pause before deleting
+          return;
+        }
+      } else {
+        currentText = texts[index].slice(0, --charIndex);
+        typingElement.textContent = currentText;
+        typingElement.style.width = charIndex + "ch";
+
+        if (charIndex === 0) {
+          isDeleting = false;
+          index = (index + 1) % texts.length;
+        }
+      }
+      setTimeout(type, isDeleting ? 100 : 150);
+    }
+
+    type();
+  </script>
+</body>
+</html>
